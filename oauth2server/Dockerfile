@@ -1,3 +1,4 @@
+
 FROM java
 MAINTAINER tanmay ambre
 COPY ./target/oauth2server-0.0.1-SNAPSHOT.jar /usr/local/oauth2server/
