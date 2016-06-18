@@ -89,12 +89,7 @@
                                     {
                                         "name": "MONGO_SVC_URL",
                                         "value": "mongodb://172.30.46.38:27017"
-                                    },
-                                    {
-                                        "name": "DEPLOY_ENV",
-                                        "value": "oo"
                                     }
-
                                 ],
                                 "resources": {},
                                 "volumeMounts": [

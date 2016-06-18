@@ -50,11 +50,6 @@ public class ClientDetailsServiceImpl implements ClientDetailsService
 			logger.error(e);
 			throw new ClientRegistrationException(e.getMessage(), e);
 		}
-		
-		if (clientInfo == null)
-		{
-			throw new ClientRegistrationException("Client Not Found");
-		}
 
 		BaseClientDetails bcd = new BaseClientDetails();
 		bcd.setClientId(clientInfo.getClientId());

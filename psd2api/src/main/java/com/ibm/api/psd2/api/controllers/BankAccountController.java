@@ -1,5 +1,7 @@
 package com.ibm.api.psd2.api.controllers;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -58,6 +60,9 @@ public class BankAccountController extends APIController
 		ResponseEntity<List<BankAccountOverviewBean>> response;
 		try
 		{
+			// @Todo: Check if the user is authorized to view this account or
+			// not.
+
 			String user = (String) auth.getPrincipal();
 			ViewIdBean ownerView = new ViewIdBean();
 			ownerView.setId(Constants.OWNER_VIEW);
@@ -66,7 +71,7 @@ public class BankAccountController extends APIController
 
 			if (lstSib == null)
 			{
-				throw new IllegalAccessException(Constants.ERRMSG_NOT_SUBSCRIBED);
+				throw new IllegalAccessException("Not Subscribed");
 			}
 
 			// Get a list of accountid from subscription info list that has
@@ -128,7 +133,7 @@ public class BankAccountController extends APIController
 			SubscriptionInfoBean sib = sdao.getSubscriptionInfo(user, accountId, bankId);
 			if (sib == null || !sib.getViewIds().contains(specifiedView))
 			{
-				throw new IllegalAccessException(Constants.ERRMSG_NOT_SUBSCRIBED);
+				throw new IllegalAccessException("Not Subscribed");
 			}
 
 			BankAccountDetailsBean b = bad.getBankAccountDetails(bankId, accountId, user);
@@ -173,10 +178,11 @@ public class BankAccountController extends APIController
 			SubscriptionInfoBean sib = sdao.getSubscriptionInfo(user, accountId, bankId);
 			if (sib == null || !sib.getViewIds().contains(ownerView))
 			{
-				throw new IllegalAccessException(Constants.ERRMSG_NOT_SUBSCRIBED);
+				throw new IllegalAccessException("Not Subscribed");
 			}
 
 			BankAccountDetailsBean b = bad.getBankAccountDetails(bankId, accountId, user);
+			BankAccountDetailsViewBean bo = null;
 
 			if (b == null)
 			{
@@ -185,7 +191,7 @@ public class BankAccountController extends APIController
 
 			BankAccountOwnerViewVisitor bv = new BankAccountOwnerViewVisitor();
 			b.registerVisitor(BankAccountDetailsViewBean.class.getName() + ":" + Constants.OWNER_VIEW, bv);
-			BankAccountDetailsViewBean bo = b.getBankAccountDetails(Constants.OWNER_VIEW);
+			bo = b.getBankAccountDetails(Constants.OWNER_VIEW);
 			response = ResponseEntity.ok(bo);
 
 		} catch (Exception ex)
@@ -202,6 +208,9 @@ public class BankAccountController extends APIController
 		ResponseEntity<String> response;
 		try
 		{
+			// @Todo: Check if the user is authorized to view this account or
+			// not.
+
 			if (b == null)
 			{
 				throw new IllegalArgumentException("No Account Specified");
@@ -234,7 +243,7 @@ public class BankAccountController extends APIController
 			SubscriptionInfoBean sib = sdao.getSubscriptionInfo(user, accountId, bankId);
 			if (sib == null || !sib.getViewIds().contains(ownerView))
 			{
-				throw new IllegalAccessException(Constants.ERRMSG_NOT_SUBSCRIBED);
+				throw new IllegalAccessException("Not Subscribed");
 			}
 
 			TransactionBean t = tdao.getTransactionById(bankId, accountId, txnId);
@@ -270,16 +279,23 @@ public class BankAccountController extends APIController
 			SubscriptionInfoBean sib = sdao.getSubscriptionInfo(user, accountId, bankId);
 			if (sib == null || !sib.getViewIds().contains(ownerView))
 			{
-				throw new IllegalAccessException(Constants.ERRMSG_NOT_SUBSCRIBED);
+				throw new IllegalAccessException("Not Subscribed");
 			}
 
+			if (tdao == null)
+			{
+				logger.error("tdao is null");
+			}
 			List<TransactionBean> t = tdao.getTransactions(bankId, accountId, sortDirection, limit, fromDate, toDate, sortBy, number);
 
 			response = ResponseEntity.ok(t);
 
 		} catch (Exception ex)
 		{
-			logger.error(ex);
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			ex.printStackTrace(pw);
+			logger.error(sw.toString());
 			response = ResponseEntity.badRequest().body(null);
 		}
 		return response;

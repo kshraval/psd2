@@ -4,7 +4,6 @@ import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Projections.excludeId;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,8 +30,6 @@ public class BankAccountDaoImpl implements BankAccountDao
 
 	@Value("${mongodb.collection.bankaccounts}")
 	private String bankAccounts;
-	
-	private static final String LOG_PREFIX = "document = ";
 
 	@Override
 	public BankAccountDetailsBean getBankAccountDetails(String bankId, String accountId) throws Exception
@@ -48,7 +45,7 @@ public class BankAccountDaoImpl implements BankAccountDao
 			Document document = iterable.first();
 			if (document != null)
 			{
-				logger.info(LOG_PREFIX + document.toJson());
+				logger.info("message = " + document.toJson());
 				b = mdp.parse(document, new BankAccountDetailsBean());
 			}
 		}
@@ -57,7 +54,7 @@ public class BankAccountDaoImpl implements BankAccountDao
 	}
 
 	@Override
-	public List<BankAccountDetailsBean> getBankAccounts(String username, String bank_id) throws Exception
+	public ArrayList<BankAccountDetailsBean> getBankAccounts(String username, String bank_id) throws Exception
 	{
 		logger.info("bankId = " + bank_id + ", username = " + username);
 		MongoCollection<Document> coll = conn.getDB().getCollection(bankAccounts);
@@ -69,7 +66,7 @@ public class BankAccountDaoImpl implements BankAccountDao
 		{
 			if (document != null)
 			{
-				logger.info(LOG_PREFIX + document.toJson());
+				logger.info("message = " + document.toJson());
 				BankAccountDetailsBean b = mdp.parse(document, new BankAccountDetailsBean());
 				if (accList == null)
 				{
@@ -98,7 +95,7 @@ public class BankAccountDaoImpl implements BankAccountDao
 			Document document = iterable.first();
 			if (document != null)
 			{
-				logger.info(LOG_PREFIX + document.toJson());
+				logger.info("message = " + document.toJson());
 			}
 			b = mdp.parse(document, new BankAccountDetailsBean());
 		}
@@ -106,7 +103,6 @@ public class BankAccountDaoImpl implements BankAccountDao
 		return b;
 	}
 
-	@Override
 	public void createBankAccountDetails(BankAccountDetailsBean b) throws Exception
 	{
 		MongoCollection<Document> coll = conn.getDB().getCollection(bankAccounts);

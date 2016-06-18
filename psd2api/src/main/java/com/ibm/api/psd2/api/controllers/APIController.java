@@ -43,7 +43,8 @@ public abstract class APIController
 		ErrorBean eb = new ErrorBean();
 		logger.error(e.getMessage(), e);
 		eb.setError(e.getMessage());
-		response = badRequest ? ResponseEntity.badRequest().body(eb)
+		response = ResponseEntity.badRequest().body(eb);
+		response = (badRequest) ? ResponseEntity.badRequest().body(eb)
 				: ResponseEntity.ok().body(eb);
 		return response;
 	}

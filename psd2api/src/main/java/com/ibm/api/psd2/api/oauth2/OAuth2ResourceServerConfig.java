@@ -12,7 +12,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -59,7 +58,6 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter
 		RemoteTokenServices rts = new RemoteTokenServices();
 		rts.setClientId(clientId);
 		rts.setClientSecret(clientSecret);
-//		rts.setRestTemplate(new RestTemplate(new MySimpleClientHttpRequestFactory()));
 		rts.setCheckTokenEndpointUrl(checkTokenEndpoint);
 		return rts;
 	}

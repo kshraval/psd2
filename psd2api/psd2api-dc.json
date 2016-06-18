@@ -92,7 +92,7 @@
                                     },
                                     {
                                         "name": "OAUTH_CHECKTOKEN_URL",
-                                        "value": "https://172.30.83.66:8081/oauth2server/oauth/check_token"
+                                        "value": "http://172.30.83.66:8081/oauth2server/oauth/check_token"
                                     },
                                     {
                                         "name": "OAUTH_CLIENT_ID",
@@ -101,10 +101,6 @@
                                     {
                                         "name": "OAUTH_CLIENT_SECRET",
                                         "value": "password01"
-                                    },
-                                    {
-                                        "name": "DEPLOY_ENV",
-                                        "value": "oo"
                                     },
                                     {
                                         "name": "USE_KAFKA",

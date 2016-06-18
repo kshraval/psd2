@@ -73,4 +73,11 @@ public class BankDaoImpl implements BankDao
 		}		
 		return b;
 	}
+
+	@Override
+	public void insertBank(BankBean bankBean) throws Exception {
+		MongoCollection<Document> coll = conn.getDB().getCollection(banks);
+		coll.insertOne(mdp.format(bankBean));
+		
+	}
 }

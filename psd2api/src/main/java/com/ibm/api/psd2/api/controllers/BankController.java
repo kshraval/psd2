@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -58,6 +59,23 @@ public class BankController extends APIController
 		{
 			logger.error(ex);
 			response = ResponseEntity.badRequest().body(null);
+		}
+		return response;
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "admin/bank/", produces = MediaType.ALL_VALUE)
+	public @ResponseBody ResponseEntity<String> createBank(@RequestBody BankBean bankBeanReq)
+	{
+		ResponseEntity<String> response;
+		try
+		{
+			bdao.insertBank(bankBeanReq);
+			response = ResponseEntity.ok("SUCCESS");
+		}
+		catch (Exception e)
+		{
+			logger.error(e);
+			response = ResponseEntity.badRequest().body(e.getMessage());
 		}
 		return response;
 	}
